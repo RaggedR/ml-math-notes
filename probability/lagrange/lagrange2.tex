@@ -1,0 +1,174 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{enumitem}
+\setlist{nosep} % Compact item spacing
+
+\begin{document}
+
+\title{Geometric Intuition and Formalism for Lagrange Multipliers}
+\author{}
+\date{}
+\maketitle
+
+\subsection*{Introduction}
+In this section we shall look at some constrained optimization problems. The  method of Lagrange multipliers allows us to transform constrained problems into unconstrained ones through the use of auxiliary variables. We shall focus on the two dimensional case.
+
+\subsection*{Gradients and Directional Derivatives}
+
+For a differentiable scalar function \( f(x,y) \), the \textbf{gradient} is the vector of partial derivatives:
+\[
+\nabla f = \left( \frac{\partial f}{\partial x},\, \frac{\partial f}{\partial y} \right).
+\]
+If \( \mathbf{u} \) is a unit vector, the \textbf{directional derivative} of \( f \) in the direction \( \mathbf{u} \) is
+\[
+D_{\mathbf{u}} [f]  = \nabla f \cdot \mathbf{u}.
+\]
+
+\subsection*{Level Curves}
+
+Every point \((x,y)\) in the domain of \( f \) lies on a \textbf{level curve} defined by \( f(x,y) = k \) for some constant \( k = f(x,y) \).
+If \( \mathbf{v} \) is a vector tangent to the level curve at that point, then the directional drivative in the direction of \( \mathbf{v} \) vanishes.
+\[
+\nabla f \cdot \mathbf{v} = 0,
+\]
+This implies that \( \nabla f \) is perpendicular to the level curve \( f(x,y) = k \). In other words, the gradient points in the direction of steepest ascent and is normal to the contours of constant \( f \).
+
+Stop and think about this as it is key for everything that follows.
+
+\subsection*{Tangency Condition for Constrained Extrema}
+Suppose we wish to maximize $f(x,y)$ subject to constraint $g(x,y) = c$. At an extremum $(x^*, y^*)$ the level curve $f(x,y) = f(x^*,y^*)$ must be tangent to the constraint curve $g(x,y) = c$. This implies that both gradients $\nabla f$ and $\nabla g$ are perpendicular to their shared tangent line at $(x^*, y^*)$. Consequently, the gradients must be parallel:
+    \[
+    \nabla f = \lambda \nabla g \quad \text{for some scalar } \lambda.
+    \]
+If the gradients were not parallel, movement along the constraint would increase or decrease $f$, contradicting optimality.
+
+\subsection*{Illustrative Example}
+Maximize $f(x, y) = x + y$ subject to $g(x, y) = x^2 + y^2 = 1$:
+From our previous discussion the solution must occur where the line is tangent to the unit circle.
+
+Consider the point $\left( \frac{\sqrt{2}}{2}, \frac{\sqrt{2}}{2} \right)$ which lies on the unit circle. We shall show that this is the maximum. Firstly we have::
+    \[
+    \nabla f = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \quad
+    \nabla g = \begin{bmatrix} 2x \\ 2y \end{bmatrix} = \begin{bmatrix} \sqrt{2} \\ \sqrt{2} \end{bmatrix}.
+    \]
+That is $\nabla f = \lambda \nabla g$ holds with $\lambda = \frac{1}{\sqrt{2}}$, confirming tangency. And that's all we have to prove!
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\centering
+Tangency of level curves $\implies \nabla f \parallel \nabla g \implies$ Lagrange multiplier condition
+}}
+\end{center}
+
+\section*{The Lagrangian Framework}
+The geometric condition $\nabla f = \lambda \nabla g$ is necessary but insufficient—it doesn't enforce $g(x,y)=c$. We resolve this by constructing the \textbf{Lagrangian}:
+\[
+\mathcal{L}(x, y, \lambda) = f(x, y) - \lambda \left( g(x, y) - c \right).
+\]
+This single function encodes both requirements for extrema.
+
+\subsection*{Why the Lagrangian Works}
+The critical points of $\mathcal{L}$ satisfy two conditions:
+\begin{enumerate}
+    \item \textbf{Gradient alignment:} $\dfrac{\partial \mathcal{L}}{\partial x} = 0$ and $\dfrac{\partial \mathcal{L}}{\partial y} = 0$ yield
+    \[
+    \nabla f - \lambda \nabla g = \mathbf{0} \quad \implies \quad \nabla f = \lambda \nabla g.
+    \]
+    
+    \item \textbf{Constraint satisfaction:} $\dfrac{\partial \mathcal{L}}{\partial \lambda} = 0$ gives
+    \[
+    -(g(x,y) - c) = 0 \quad \implies \quad g(x,y) = c.
+    \]
+\end{enumerate}
+Solving $\nabla \mathcal{L} = \mathbf{0}$ simultaneously enforces both conditions, identifying candidate extrema.
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{\centering
+The Lagrangian $\mathcal{L}(x, y, \lambda) = f(x, y) - \lambda (g(x, y) - c)$ unifies:\\
+1. Gradient alignment via $\partial\mathcal{L}/\partial x = \partial\mathcal{L}/\partial y = 0$\\
+2. Constraint satisfaction via $\partial\mathcal{L}/\partial\lambda = 0$
+}}
+\end{center}
+
+\section*{Worked Examples}
+\subsection*{Example 1: Maximizing Cylinder Volume}
+\textbf{Problem:} Find radius $r$ and height $h$ maximizing volume $V = \pi r^2 h$ for a closed cylinder with fixed surface area $S = 12\pi$.
+
+\textbf{Solution:}
+\begin{itemize}
+\item \textbf{Constraint:} $2\pi r^2 + 2\pi rh = 12\pi$ (top, bottom, and lateral surface)
+    \item \textbf{Lagrangian:} $\mathcal{L}(r, h, \lambda) = \pi r^2 h - \lambda (2\pi r^2 + 2\pi rh - 12\pi)$
+    \item \textbf{First-order conditions:}
+    \[
+    \begin{aligned}
+    \frac{\partial \mathcal{L}}{\partial r} &= 2\pi r h - \lambda (4\pi r + 2\pi h) = 0 \quad &(1)\\
+    \frac{\partial \mathcal{L}}{\partial h} &= \pi r^2 - \lambda (2\pi r) = 0 \quad &(2)\\
+    \frac{\partial \mathcal{L}}{\partial \lambda} &= -(2\pi r^2 + 2\pi rh - 12\pi) = 0 \quad &(3)
+    \end{aligned}
+    \]
+    \item \textbf{Solving:}
+    \begin{itemize}
+        \item From (2): $\pi r^2 = 2\pi r \lambda \implies \lambda = r/2$ \quad (assuming $r \neq 0$)
+        \item Substitute into (1): $2\pi r h = (r/2)(4\pi r + 2\pi h) \implies 4h = 4r + 2h \implies h = 2r$
+        \item Substitute into (3): $2\pi r^2 + 2\pi r(2r) = 12\pi \implies 6\pi r^2 = 12\pi \implies r = \sqrt{2}$
+        \item Thus $h = 2\sqrt{2}$, and maximum volume $V = \pi (\sqrt{2})^2 (2\sqrt{2}) = 4\sqrt{2}\pi$
+    \item \textbf{Interpretation:} The optimal cylinder has height equal to diameter ($h = 2r$).
+\end{itemize}
+\end{itemize}
+
+\subsection*{Example 2: Minimum Distance to a Plane}
+\textbf{Problem:} Find the point on plane $2x + 3y + z = 6$ closest to the origin.
+
+\textbf{Solution:}
+\begin{itemize}
+\item \textbf{Objective:} Minimize squared distance $f(x,y,z) = x^2 + y^2 + z^2$ (avoids square roots)
+    \item \textbf{Lagrangian:} $\mathcal{L}(x,y,z,\lambda) = x^2 + y^2 + z^2 - \lambda (2x + 3y + z - 6)$
+    \item \textbf{First-order conditions:}
+    \[
+    \begin{aligned}
+    \frac{\partial \mathcal{L}}{\partial x} &= 2x - 2\lambda = 0 \implies x = \lambda \quad &(1)\\
+    \frac{\partial \mathcal{L}}{\partial y} &= 2y - 3\lambda = 0 \implies y = \tfrac{3}{2}\lambda \quad &(2)\\
+    \frac{\partial \mathcal{L}}{\partial z} &= 2z - \lambda = 0 \implies z = \tfrac{\lambda}{2} \quad &(3)\\
+    \frac{\partial \mathcal{L}}{\partial \lambda} &= -(2x + 3y + z - 6) = 0 \quad &(4)
+    \end{aligned}
+    \]
+    \item \textbf{Solving:}
+    \begin{itemize}
+        \item Substitute (1)-(3) into (4): $2(\lambda) + 3(\tfrac{3}{2}\lambda) + \tfrac{\lambda}{2} = 6 \implies 7\lambda = 6 \implies \lambda = \tfrac{6}{7}$
+        \item Critical point: $\left( \tfrac{6}{7}, \tfrac{9}{7}, \tfrac{3}{7} \right)$
+        \item Minimum distance: $\sqrt{ \left(\tfrac{6}{7}\right)^2 + \left(\tfrac{9}{7}\right)^2 + \left(\tfrac{3}{7}\right)^2 } = \sqrt{\tfrac{126}{49}} = \tfrac{3\sqrt{14}}{7}$
+    \item \textbf{Verification:} The vector $\langle \tfrac{6}{7}, \tfrac{9}{7}, \tfrac{3}{7} \rangle$ is parallel to the plane's normal $\langle 2,3,1 \rangle$, confirming geometric intuition.
+\end{itemize}
+\end{itemize}
+
+\subsection*{Example 3: Cobb-Douglas Production Maximization}
+\textbf{Problem:} Maximize output $Q = K^{1/3} L^{2/3}$ subject to budget constraint $2L + K = 12$, where $K$=capital, $L$=labor.
+
+\textbf{Solution:}
+\begin{itemize}
+\item \textbf{Lagrangian:} $\mathcal{L}(K,L,\lambda) = K^{1/3} L^{2/3} - \lambda (2L + K - 12)$
+    \item \textbf{First-order conditions:}
+    \[
+    \begin{aligned}
+    \frac{\partial \mathcal{L}}{\partial K} &= \tfrac{1}{3} K^{-2/3} L^{2/3} - \lambda = 0 \quad &(1)\\
+    \frac{\partial \mathcal{L}}{\partial L} &= \tfrac{2}{3} K^{1/3} L^{-1/3} - 2\lambda = 0 \quad &(2)\\
+    \frac{\partial \mathcal{L}}{\partial \lambda} &= -(2L + K - 12) = 0 \quad &(3)
+    \end{aligned}
+    \]
+    \item \textbf{Solving:}
+        \item Divide (1) by (2): $\dfrac{ \tfrac{1}{3} K^{-2/3} L^{2/3} }{ \tfrac{2}{3} K^{1/3} L^{-1/3} } = \dfrac{\lambda}{2\lambda} \implies \tfrac{1}{2} \cdot \tfrac{L}{K} = \tfrac{1}{2} \implies L = K$
+        \item Substitute into (3): $2K + K = 12 \implies K = 4$, $L = 4$
+        \item Maximum output: $Q = 4^{1/3} \cdot 4^{2/3} = 4$
+    \item \textbf{Economic insight:} Optimal allocation equalizes capital and labor investments despite different input prices.
+\end{itemize}
+
+\section*{Conclusion}
+Lagrange multipliers transform constrained optimization into a system of equations by leveraging geometric principles: extrema occur where objective and constraint gradients are parallel. The Lagrangian formalism unifies this gradient condition with constraint satisfaction. This approach generalizes to:
+\begin{itemize}
+\item Multiple constraints (introduce $\lambda_i$ for each $g_i(\mathbf{x}) = c_i$)
+    \item Higher dimensions (gradients remain normal to level surfaces)
+    \item Inequality constraints (via Karush-Kuhn-Tucker conditions)
+The geometric insight—that solutions occur at tangency points—provides an intuitive anchor for these powerful techniques.
+\end{itemize}
+\end{document}
