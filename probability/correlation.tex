@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}[section]  % numbered within sections
+
+\begin{document}
+
+\section*{Ellipses and Quadratic Forms}
+
+\subsection{Ellipse centered at the origin}
+
+Let us begin by recalling the formula for an ellipse centered at the origin who's major principle axis is aligned with the x-axis and minor principal axis is aligned with the y-axis:
+\[\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1\]
+where \(a\) is the semi-major axis and \(b\) is the semi-minor axis.
+
+If we wish to rotate the axes then we use the rotation matrix:
+\[\begin{bmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{bmatrix}\]
+to transform the coordinates \((x, y)\) to new coordinates \((x', y')\):
+\[\begin{bmatrix}
+x' \\
+y'
+\end{bmatrix} = \begin{bmatrix}
+\cos \theta & -\sin \theta \\
+\sin \theta & \cos \theta
+\end{bmatrix} \begin{bmatrix}
+x \\
+y
+\end{bmatrix}\]
+This gives us:
+\[x' = x \cos \theta - y \sin \theta\]
+\[y' = x \sin \theta + y \cos \theta\]
+And the equation for the ellipse in the rotated coordinate system becomes:
+\[\frac{(x \cos \theta - y \sin \theta)^2}{a^2} + \frac{(x \sin \theta + y \cos \theta)^2}{b^2} = 1\]   
+In particular the equation for an ellipse with semi-major axis along the ine y=x and semi-minor axis along the line y = -x is given by setting \(\theta = \frac{\pi}{4}\), and we get
+\[\frac{(x - y)^2}{2a^2} + \frac{(x + y)^2}{2b^2} = 1\]
+
+\subsection{Positive Definite Matrices}
+
+\begin{theorem}
+An ellipse can also be represented by a quadratic form:
+\[\begin{bmatrix}x & y\end{bmatrix} \begin{bmatrix}
+A & B \\
+B & C
+\end{bmatrix} \begin{bmatrix}x \\
+y\end{bmatrix} = 1\]
+where the matrix\(M = \begin{bmatrix}
+A & B \\
+B & C
+\end{bmatrix}\) is positive definite (symmetric with non-negative eigenvalues).
+\begin{proof}
+
+When we diagonalize the matrix $M$ using its eigenvectors, we obtain the spectral decomposition:
+\[
+M = QDQ^T
+\]
+where $Q$ is an orthogonal matrix (rotation matrix) whose columns are the eigenvectors of $M$, and $D$ is a diagonal matrix containing the eigenvalues $\lambda_1, \lambda_2$.
+
+The quadratic form can now be rewritten as:
+\[
+\mathbf{v}^T M \mathbf{v} = \mathbf{v}^T QDQ^T \mathbf{v} = (Q^T\mathbf{v})^T D (Q^T\mathbf{v}) = 1
+\]
+where \[\mathbf{v} = \begin{bmatrix} x \\ y \end{bmatrix}\].
+Let $\mathbf{v'} = Q^T\mathbf{v}$ represent the coordinates in the rotated coordinate system where 
+\[\mathbf{v'} = \begin{bmatrix} x' \\ y' \end{bmatrix}\] Then:
+\[
+\mathbf{x}'^T D \mathbf{x}' = \lambda_1 {x'}^2 + \lambda_2 {y'}^2 = 1
+\]
+
+Re-arranging we get:
+\[
+\frac{{x'}^2}{1/\lambda_1} + \frac{{y'}^2}{1/\lambda_2} = 1
+\]
+
+This is the standard equation of an ellipse with semi-axis lengths:
+\[
+a = \frac{1}{\sqrt{\lambda_{\min}}}, \quad b = \frac{1}{\sqrt{\lambda_{\max}}}
+\]
+where $\lambda_{\min}$ is the smaller eigenvalue (corresponding to the major axis) and $\lambda_{\max}$ is the larger eigenvalue (corresponding to the minor axis).
+
+Therefore, the semi-axis lengths are given by:
+\[
+\boxed{a = \frac{1}{\sqrt{\lambda_1}}, \quad b = \frac{1}{\sqrt{\lambda_2}}}
+\]
+where $\lambda_1 \leq \lambda_2$ for the standard convention with $a \geq b$.
+\end{proof}
+\end{theorem}
+
+The following lemma will be useful later.
+
+\begin{lemma}
+Let $M = \begin{bmatrix} 1 & \rho \\ \rho & 1 \end{bmatrix}$ be a correlation matrix with $|\rho| < 1$. Then:
+\begin{enumerate}
+    \item The eigenvalues of $M$ are $\lambda_1 = 1 + \rho$ and $\lambda_2 = 1 - \rho$.
+    \item Corresponding eigenvectors are $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$ and $\mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$.
+    \item The quadratic form $\mathbf{x}^T M^{-1} \mathbf{x} = 1$ defines an ellipse centered at the origin with:
+    \item Semi-axis length $\sqrt{1+\rho}$ along the direction of $\mathbf{v}_1$ (line $y = x$)
+        \item Semi-axis length $\sqrt{1-\rho}$ along the direction of $\mathbf{v}_2$ (line $y = -x$)
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+We prove each part of the theorem sequentially.
+
+\textbf{Part 1: Eigenvalues}
+
+The eigenvalues $\lambda$ satisfy the characteristic equation $\det(M - \lambda I) = 0$:
+\[
+\det\begin{bmatrix} 
+1-\lambda & \rho \\ 
+\rho & 1-\lambda 
+\end{bmatrix} = (1-\lambda)^2 - \rho^2 = 0
+\]
+
+Expanding and solving:
+\[
+(1-\lambda)^2 = \rho^2 \implies 1-\lambda = \pm\rho \implies \lambda = 1 \mp \rho
+\]
+
+Therefore, the eigenvalues are:
+\[
+\lambda_1 = 1 + \rho, \quad \lambda_2 = 1 - \rho
+\]
+
+Since $|\rho| < 1$, both eigenvalues are positive, confirming that $M$ is positive definite.
+
+\textbf{Part 2: Eigenvectors}
+
+For $\lambda_1 = 1 + \rho$, solve $(M - \lambda_1 I)\mathbf{v} = \mathbf{0}$:
+\[
+\begin{bmatrix}
+1-(1+\rho) & \rho \\
+\rho & 1-(1+\rho)
+\end{bmatrix}
+\begin{bmatrix} v_1 \\ v_2 \end{bmatrix}
+=
+\begin{bmatrix}
+-\rho & \rho \\
+\rho & -\rho
+\end{bmatrix}
+\begin{bmatrix} v_1 \\ v_2 \end{bmatrix}
+=
+\begin{bmatrix} 0 \\ 0 \end{bmatrix}
+\]
+
+This yields the equation $-\rho v_1 + \rho v_2 = 0$, which simplifies to $v_1 = v_2$. Choosing $v_1 = 1$, we obtain the eigenvector:
+\[
+\mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+\]
+
+For $\lambda_2 = 1 - \rho$, solve $(M - \lambda_2 I)\mathbf{v} = \mathbf{0}$:
+\[
+\begin{bmatrix}
+1-(1-\rho) & \rho \\
+\rho & 1-(1-\rho)
+\end{bmatrix}
+\begin{bmatrix} v_1 \\ v_2 \end{bmatrix}
+=
+\begin{bmatrix}
+\rho & \rho \\
+\rho & \rho
+\end{bmatrix}
+\begin{bmatrix} v_1 \\ v_2 \end{bmatrix}
+=
+\begin{bmatrix} 0 \\ 0 \end{bmatrix}
+\]
+
+This yields the equation $\rho v_1 + \rho v_2 = 0$, which simplifies to $v_1 = -v_2$. Choosing $v_1 = 1$, we obtain the eigenvector:
+\[
+\mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}
+\]
+
+Note that $\mathbf{v}_1$ and $\mathbf{v}_2$ are orthogonal: $\mathbf{v}_1^T\mathbf{v}_2 = 1 \cdot 1 + 1 \cdot (-1) = 0$.
+
+
+This is the standard form of an ellipse with semi-axis lengths $\sqrt{1+\rho}$ and $\sqrt{1-\rho}$.
+
+Since the columns of $Q$ are the normalized eigenvectors $\frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ and $\frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}$, the principal axes align with the lines $y = x$ and $y = -x$.
+
+For $\rho \geq 0$, $\sqrt{1+\rho} \geq \sqrt{1-\rho}$, so:
+\item Semi-major axis length = $\sqrt{1+\rho}$ along $y = x$
+    \item Semi-minor axis length = $\sqrt{1-\rho}$ along $y = -x$
+
+This completes the proof.
+\end{proof}
+
+\end{lemma}
+
+
+\end{document}
