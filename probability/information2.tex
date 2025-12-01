@@ -356,30 +356,67 @@ H(X_1, X_2, \dots, X_n) = H(X_1) + H(X_2) + \dots + H(X_n) = n \text{ bits}.
 \]
 
 Intuitively, additivity works because independent variables carry \emph{separate, non-overlapping information}. 
-If the variables are \textbf{not independent}, knowing one gives partial information about the other, so the joint entropy is less than the sum:
-\[
-H(X, Y) < H(X) + H(Y) \quad \text{if $X$ and $Y$ are dependent.}
-\]
-We will see concrete examples of this later.
 
+\section*{Complete Illustration: Two Coin Tosses}
 
-Back to our example, for $X$, which takes values $-2, 0, +2$ with probabilities $\frac{1}{4}, \frac{1}{2}, \frac{1}{4}$, we compute:
-\[
-\begin{aligned}
-H(X) &= -\sum_x P_X(x) \log_2 P_X(x) \\
-&= -\left[ \frac{1}{4} \log_2 \frac{1}{4} + \frac{1}{2} \log_2 \frac{1}{2} + \frac{1}{4} \log_2 \frac{1}{4} \right] \\
-&= -\left[ \frac{1}{4}(-2) + \frac{1}{2}(-1) + \frac{1}{4}(-2) \right] = -[-1.5] = 1.5
-\end{aligned}
-\]
-So \textbf{$H(X) = \frac{3}{2}$ bits}. 
+Let each fair coin toss take values $\pm 1$. Define:
+\begin{itemize}
+    \item $X$ = sum of the two tosses: $X = \text{coin}_1 + \text{coin}_2$
+    \item $Y$ = whether tosses match: $Y = +1$ if they match, $Y = -1$ if they differ
+\end{itemize}
 
-Now let's calculate the entropy of $Y$
+The four equally likely outcomes are:
 
-$Y$ can take either of the values $+1$ or $-1$, each with probability $\frac{1}{2}$, so:
-\[
-H(Y) = -\left[ \frac{1}{2} \log_2 \frac{1}{2} + \frac{1}{2} \log_2 \frac{1}{2} \right] = 1 \text{ bit}
-\]
-Knowing nothing, it takes 1 bit to describe whether the tosses matched.
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+Outcome & Probability & $X$ (sum) & $Y$ (match?) \\
+\midrule
+$(+1, +1)$ & $1/4$ & $+2$ & $+1$ (match) \\
+$(+1, -1)$ & $1/4$ & $0$ & $-1$ (no match) \\
+$(-1, +1)$ & $1/4$ & $0$ & $-1$ (no match) \\
+$(-1, -1)$ & $1/4$ & $-2$ & $+1$ (match) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Joint Distribution $P(X,Y)$}
+
+From the table, the joint probabilities are:
+\begin{align*}
+P(X=+2, Y=+1) &= \tfrac{1}{4} \\
+P(X=0, Y=-1) &= \tfrac{1}{2} \\
+P(X=-2, Y=+1) &= \tfrac{1}{4}
+\end{align*}
+
+\subsection*{Calculating $H(X,Y)$}
+
+\begin{align*}
+H(X,Y) &= -\sum_{x,y} P(x,y) \log_2 P(x,y) \\
+&= -\left[ \tfrac{1}{4}\log_2\tfrac{1}{4} + \tfrac{1}{2}\log_2\tfrac{1}{2} + \tfrac{1}{4}\log_2\tfrac{1}{4} \right] \\
+&= -\left[ \tfrac{1}{4}(-2) + \tfrac{1}{2}(-1) + \tfrac{1}{4}(-2) \right] \\
+&= -[-0.5 - 0.5 - 0.5] \\
+&= \boxed{1.5 \text{ bits}}
+\end{align*}
+
+\subsection*{The Inequality}
+
+Comparing entropies:
+\begin{equation*}
+H(X,Y) = 1.5 \quad < \quad H(X) + H(Y) = 1.5 + 1 = 2.5 \text{ bits}
+\end{equation*}
+
+This confirms $H(X,Y) < H(X) + H(Y)$.
+
+\subsection*{Mutual Information}
+
+The ``missing'' $1$ bit is the mutual information $I(X;Y)$:
+\begin{equation*}
+I(X;Y) = H(X) + H(Y) - H(X,Y) = 1 \text{ bit}
+\end{equation*}
+
+Intuition: Knowing $Y$ completely determines whether $X=0$ is possible, reducing uncertainty about $X$.
+
 
 \section*{Conditional Entropy $H(X \mid Y)$}
 
